@@ -1,0 +1,28 @@
+// 백준 9655 : 돌 게임
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main() {
+	int n; // 돌의 개수
+	cin >> n;
+
+	int dp[1001] = { 0 };
+	dp[1] = 1; // 돌이 1개 일 때
+	dp[2] = 2; // 돌이 2개 일 때
+	dp[3] = 1; // 돌이 3개 일 때
+
+	int j = 1;
+	// 돌이 4개 일때 부터 n개 일때 까지 반복
+	for (int i = 4; i <= n; i++) {
+		if (j % 3 == 1) j = 1;
+		dp[i] = dp[j] + dp[i - j];
+		j++;
+	}
+
+	// 두 사람이 완벽하게 게임을 했다고 가정, 돌을 가져오는 횟수가 홀수라면 상근 승, 짝수라면 창영 승
+	if (dp[n] % 2 == 0) cout << "CY" << endl;
+	else cout << "SK" << endl;
+}
