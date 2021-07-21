@@ -1,0 +1,36 @@
+// 백준 1010 : 다리 놓기
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main() {
+	int t; // 테스트의 개수
+	cin >> t;
+
+	vector<int> answer; // 각 테스트의 답안을 저장
+	while (t != 0) {
+		int n, m; // 강의 서쪽과 동쪽에 있는 사이트의 개수
+		cin >> n >> m;
+
+		int dp[31][31] = { 0 };
+		// 서쪽에 사이트가 하나인경우 동쪽의 사이트 개수가 가능한 경우의 수가 됨 (초기값 설정)
+		for (int i = 1; i <= m; i++) {
+			dp[1][i] = dp[1][i - 1] + 1;
+		}
+
+		for (int i = 2; i <= n; i++) {
+			for (int j = i; j <= m; j++) {
+				dp[i][j] = dp[i - 1][j - 1] + dp[i][j - 1];
+			}
+		}
+
+		answer.push_back(dp[n][m]);
+		t--;
+	}
+
+	for (int tmp : answer) { // 답안 출력
+		cout << tmp << endl;
+	}
+}
