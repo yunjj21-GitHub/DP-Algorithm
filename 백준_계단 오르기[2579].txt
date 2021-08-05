@@ -1,0 +1,26 @@
+// 백준 2579 : 계단 오르기
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int main() {
+	int n; // 계단의 수
+	cin >> n;
+	int* score = new int[n+1]; // 각 계단에 할당된 점수
+	for (int i = 1; i <= n; i++) {
+		cin >> score[i];
+	}
+
+	int* dp = new int[n + 1]; // 각 계단을 밟는 경우 점수의 최댓값
+	// 연속해서 두계단 이상을 밟지 못한다.
+	dp[0] = 0;
+	dp[1] = score[1];
+	dp[2] = score[1] + score[2];
+	for (int i = 3; i <= n; i++) {
+		dp[i] = max(score[i] + dp[i - 2], score[i] + score[i - 1] + dp[i - 3]);
+	}
+	cout << dp[n] << '\n';
+}
