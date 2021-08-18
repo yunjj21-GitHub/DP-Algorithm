@@ -1,0 +1,39 @@
+// 백준 1890 : 점프
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int n;
+int map[100][100];
+long long dp[100][100];
+
+int main() {
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cin >> map[i][j];
+		}
+	}
+
+	dp[0][0] = 1;
+	for (int y = 0; y < n; y++) {
+		for (int x = 0; x < n; x++) {
+			if (y == n - 1 && x == n - 1) {
+				cout << dp[y][x] << '\n';
+				return 0;
+			}
+
+			if (dp[y][x] != 0) { // 해당 지점까지 갈 수 있는 경우가 존재
+				int move = map[y][x];
+				if (0 <= x + move && x + move < n) { // 오른쪽
+					dp[y][x + move] += dp[y][x];
+				}
+				if (0 <= y + move && y + move < n) { // 아래쪽
+					dp[y + move][x] += dp[y][x];
+				}
+			}
+		}
+	}
+}
