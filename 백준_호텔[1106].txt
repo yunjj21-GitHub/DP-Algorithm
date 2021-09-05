@@ -1,0 +1,33 @@
+// 백준 1106 : 호텔
+#include <vector>
+#include <string>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+#define COST_MAX 1000*100
+int C, N; // 고객 수 C, 도시 개수 N
+vector<pair<int, int>> city(20); // 각 도시에 대한 정보를 저장 {cost, num}
+int dp[COST_MAX+1];
+
+int main() {
+	cin >> C >> N;
+	for (int i = 0; i < N; i++) {
+		cin >> city[i].first >> city[i].second;
+	}
+
+	// dp[cost] = number of customers
+	for (int i = 0; i < N; i++) {
+		for (int j = city[i].first; j <= COST_MAX; j++) {
+			dp[j] = max(dp[j], dp[j - city[i].first] + city[i].second);
+		}
+	}
+
+	for (int i = 0; i <= COST_MAX; i++) {
+		if (dp[i] >= C) {
+			cout << i << '\n';
+			return 0;
+		}
+	}
+}
