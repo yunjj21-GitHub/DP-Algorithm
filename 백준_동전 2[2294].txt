@@ -1,0 +1,39 @@
+// 백준 2294 : 동전 2
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int n, k; // 동전의 종류 n, 만들고자 하는 가치 k
+int coin[100000]; // 동전에 대한 가치 정보를 저장
+int dp[100001]; // 사용할 인덱스 : 0~100000
+
+int main() {
+	cin >> n >> k;
+	for (int i = 0; i < n; i++) {
+		cin >> coin[i];
+	}
+
+	// dp[가치] = 그때 필요한 동전의 최소 갯수
+	dp[0] = 0;
+	for (int i = 0; i < n; i++) { // 각각의 동전을 기준으로 dp를 갱신
+		for (int j = coin[i]; j <= k; j++) { // 해당 동전으로 만들수 있는 가치의 필요 동전 수를 갱신
+			if (j - coin[i] == 0 || dp[j - coin[i]] != 0) {
+				if (dp[j] == 0) { // dp[j]를 만들 수 있는 방법이 없었던 경우
+					dp[j] = dp[j - coin[i]] + 1;
+				}
+				else {
+					dp[j] = min(dp[j], dp[j - coin[i]] + 1); // 이전에 있던 값과 비교
+				}
+			}
+		}
+	}
+
+	if (k != 0 && dp[k] == 0) {
+		cout << -1 << '\n';
+	}
+	else {
+		cout << dp[k] << '\n';
+	}
+}
