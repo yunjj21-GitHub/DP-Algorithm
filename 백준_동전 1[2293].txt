@@ -1,0 +1,26 @@
+// 백준 2293 : 동전 1
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int n, k;
+int coin[100]; // 동전에 대한 정보를 저장
+int dp[100001]; // 사용할 인덱스 : 0~100000
+
+int main() {
+	cin >> n >> k;
+	for (int i = 0; i < n; i++) {
+		cin >> coin[i];
+	}
+
+	dp[0] = 1;
+	for (int i = 0; i < n; i++) {
+		for (int j = coin[i]; j <= k; j++) {
+			dp[j] += dp[j - coin[i]];
+		}
+	}
+
+	cout << dp[k] << '\n';
+}
