@@ -1,0 +1,45 @@
+// 백준 11660 : 구간 합 구하기 5
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int N, M; // 사각형의 크기 N, 테스트 케이스의 개수 M
+int table[1025][1025];
+vector<pair<int, int>> S;
+vector<pair<int, int>> E;
+int dp[1025][1025];
+
+int main() {
+	// 표에 대한 정보를 입력 받음
+	cin >> N >> M;
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			cin >> table[i][j];
+		}
+	}
+
+	// dp를 구함
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			dp[i][j] = table[i][j] + dp[i - 1][j] + dp[i][j - 1];
+			dp[i][j] -= dp[i - 1][j - 1]; // 중복되어서 빼지는 부분
+		}
+	}
+
+	// 구하고자하는 부분합의 좌표를 입력
+	vector<int> answer;
+	for (int i = 0; i < M; i++) {
+		int startY, startX, endY, endX;
+		cin >> startY >> startX >> endY >> endX;
+
+		int ans = dp[endY][endX] - dp[startY - 1][endX] - dp[endY][startX - 1];
+		ans += dp[startY - 1][startX - 1];
+		answer.push_back(ans);
+	}
+
+	for (int ans : answer) {
+		cout << ans << '\n';
+	}
+}
