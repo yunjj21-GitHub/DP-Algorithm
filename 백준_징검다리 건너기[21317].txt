@@ -1,0 +1,42 @@
+// 백준 21317 : 징검다리 건너기
+#include <vector>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int small[20]; // 사용할 인덱스 : 1~19, 작은 점프
+int big[20]; // 큰 점프
+int veryBig; // 매우 큰 점프
+int dp[2][21];
+
+int main() {
+	int n; 
+	cin >> n;
+	for (int i = 1; i < n; i++) {
+		cin >> small[i] >> big[i];
+	}
+	cin >> veryBig;
+
+	dp[0][2] = dp[0][1] + small[1];
+
+	dp[0][3] = min(dp[0][2] + small[2], dp[0][1] + big[1]);
+
+	dp[0][4] = min(dp[0][3] + small[3], dp[0][2] + big[2]);
+	dp[1][4] = dp[0][1] + veryBig;
+
+	dp[0][5] = min(dp[0][4] + small[4], dp[0][3] + big[3]);
+	dp[1][5] = min(dp[1][4] + small[4], dp[0][2] + veryBig);
+
+	for (int i = 6; i <= n; i++) {
+		dp[0][i] = min(dp[0][i - 1] + small[i - 1], dp[0][i - 2] + big[i - 2]);
+
+		dp[1][i] = min(dp[1][i - 1] + small[i - 1], dp[1][i - 2] + big[i - 2]);
+		dp[1][i] = min(dp[1][i], dp[0][i - 3] + veryBig);
+	}
+
+	int ans;
+	if (n <= 3) ans = dp[0][n];
+	else ans = dp[0][n] < dp[1][n] ? dp[0][n] : dp[1][n];
+	cout << ans << '\n';
+}
